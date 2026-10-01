@@ -17,7 +17,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # json 3.x cambió la firma de JSON.parse y rompe las cookies firmadas de ActiveSupport 8.1
-gem "json", "~> 2.10"
+gem "json", "~> 3.0"
 
 # Traducciones al español de mensajes de validación, fechas y números
 gem "rails-i18n", "~> 8.0"
