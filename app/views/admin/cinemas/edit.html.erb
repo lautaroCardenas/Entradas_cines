@@ -1,0 +1,4 @@
+<% content_for :title, "Editar sede" %>
+<p><%= link_to "← #{@cinema.name_was}", admin_cinema_path(@cinema) %></p>
+<h1>Editar sede</h1>
+<%= render "form", cinema: @cinema %>

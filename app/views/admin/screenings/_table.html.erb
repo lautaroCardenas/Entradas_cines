@@ -1,0 +1,19 @@
+<table>
+  <thead>
+    <tr><th>Inicio</th><th>Película</th><th>Sede · Sala</th><th>Formato</th><th>Precio</th><th>Disponibles</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% screenings.each do |screening| %>
+      <tr>
+        <td><%= link_to date_time(screening.starts_at), admin_screening_path(screening) %></td>
+        <td><%= screening.movie.title %></td>
+        <td><%= screening.hall %></td>
+        <td><%= enum_label(Screening, :screen_format, screening.screen_format) %> · <%= enum_label(Screening, :language, screening.language) %></td>
+        <td><%= money(screening.price) %></td>
+        <td><%= screening.sold_out? ? "Agotada" : "#{screening.available_seats_count} / #{screening.hall.capacity}" %></td>
+        <td><%= link_to "Vender", new_admin_order_path(screening_id: screening.id) unless screening.sold_out? %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("No hay funciones.", class: "muted") if screenings.empty? %>

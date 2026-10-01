@@ -1,0 +1,19 @@
+<table>
+  <thead>
+    <tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Función</th><th>Entradas</th><th>Total</th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+    <% orders.each do |order| %>
+      <tr>
+        <td><%= link_to order.id, admin_order_path(order) %></td>
+        <td><%= date_time(order.created_at) %></td>
+        <td><%= order.user.name %></td>
+        <td><%= order.screening.movie.title %> · <%= date_time(order.screening.starts_at) %></td>
+        <td><%= order.cancelled? ? "—" : order.tickets.size %></td>
+        <td><%= money(order.total) %></td>
+        <td><%= status_badge(order) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("No hay compras.", class: "muted") if orders.empty? %>

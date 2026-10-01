@@ -1,0 +1,33 @@
+<% content_for :title, "Películas" %>
+<div class="header">
+  <h1>Películas</h1>
+  <%= link_to "Nueva película", new_admin_movie_path, class: "btn primary" %>
+</div>
+
+<%= form_with url: admin_movies_path, method: :get, class: "filters" do |f| %>
+  <div class="field">
+    <%= f.label :status, "Estado" %>
+    <%= f.select :status, enum_options(Movie, :status), { include_blank: "Todos", selected: params[:status] } %>
+  </div>
+  <%= f.submit "Filtrar", name: nil %>
+<% end %>
+
+<table>
+  <thead>
+    <tr><th></th><th>Título</th><th>Género</th><th>Duración</th><th>Clasificación</th><th>Estado</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% @movies.each do |movie| %>
+      <tr>
+        <td><%= image_tag movie.poster, class: "thumb", alt: "" if movie.poster.attached? %></td>
+        <td><%= link_to movie.title, admin_movie_path(movie) %></td>
+        <td><%= movie.genre %></td>
+        <td><%= movie.duration_label %></td>
+        <td><%= movie.rating %></td>
+        <td><%= enum_label(Movie, :status, movie.status) %></td>
+        <td><%= link_to "Editar", edit_admin_movie_path(movie) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("No hay películas.", class: "muted") if @movies.empty? %>

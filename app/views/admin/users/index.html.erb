@@ -1,0 +1,30 @@
+<% content_for :title, "Usuarios" %>
+<div class="header">
+  <h1>Usuarios</h1>
+  <%= link_to "Nuevo usuario", new_admin_user_path, class: "btn primary" %>
+</div>
+
+<%= form_with url: admin_users_path, method: :get, class: "filters" do |f| %>
+  <div class="field">
+    <%= f.label :role, "Rol" %>
+    <%= f.select :role, enum_options(User, :role), { include_blank: "Todos", selected: params[:role] } %>
+  </div>
+  <%= f.submit "Filtrar", name: nil %>
+<% end %>
+
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Alta</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.name, admin_user_path(user) %></td>
+        <td><%= user.email_address %></td>
+        <td><%= enum_label(User, :role, user.role) %></td>
+        <td><%= l(user.created_at.to_date) %></td>
+        <td><%= link_to "Editar", edit_admin_user_path(user) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

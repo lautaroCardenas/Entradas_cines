@@ -1,0 +1,24 @@
+<% content_for :title, "Función" %>
+<p><%= link_to "← Funciones", admin_screenings_path %></p>
+<h1><%= @screening.movie.title %></h1>
+
+<dl>
+  <dt>Inicio</dt><dd><%= date_time(@screening.starts_at) %></dd>
+  <dt>Fin (con limpieza)</dt><dd><%= date_time(@screening.ends_at) %></dd>
+  <dt>Sede · Sala</dt><dd><%= link_to @screening.hall, admin_hall_path(@screening.hall) %></dd>
+  <dt>Formato</dt><dd><%= enum_label(Screening, :screen_format, @screening.screen_format) %> · <%= enum_label(Screening, :language, @screening.language) %></dd>
+  <dt>Precio</dt><dd><%= money(@screening.price) %></dd>
+  <dt>Ocupación</dt><dd><%= @taken_seat_ids.size %> / <%= @screening.hall.capacity %></dd>
+</dl>
+
+<div class="actions">
+  <%= link_to "Vender entradas", new_admin_order_path(screening_id: @screening.id), class: "btn primary" unless @screening.sold_out? %>
+  <%= link_to "Editar", edit_admin_screening_path(@screening), class: "btn" %>
+  <%= delete_button admin_screening_path(@screening) %>
+</div>
+
+<h2>Ocupación de la sala</h2>
+<%= render "admin/shared/seat_map", seats_by_row: @seats_by_row, taken_seat_ids: @taken_seat_ids %>
+
+<h2>Compras</h2>
+<%= render "admin/orders/table", orders: @orders %>

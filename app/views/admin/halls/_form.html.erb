@@ -1,0 +1,25 @@
+<%= form_with model: [ :admin, hall ] do |f| %>
+  <%= form_errors(hall) %>
+  <div class="field">
+    <%= f.label :cinema_id, "Sede" %>
+    <%= f.collection_select :cinema_id, Cinema.order(:name), :id, :name, { prompt: "Elegí una sede" }, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true, placeholder: "Sala 1" %>
+  </div>
+  <div class="field">
+    <%= f.label :hall_type %>
+    <%= f.select :hall_type, enum_options(Hall, :hall_type) %>
+  </div>
+  <div class="field">
+    <%= f.label :rows_count %>
+    <%= f.number_field :rows_count, min: 1, max: Hall::ROW_LETTERS.size, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :seats_per_row %>
+    <%= f.number_field :seats_per_row, min: 1, max: 30, required: true %>
+  </div>
+  <p class="muted">Los asientos se generan automáticamente a partir de filas × asientos por fila.</p>
+  <%= f.submit "Guardar" %>
+<% end %>

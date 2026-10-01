@@ -1,0 +1,40 @@
+<% content_for :title, "Compra ##{@order.id}" %>
+<p><%= link_to "← Compras", admin_orders_path %></p>
+<h1>Compra #<%= @order.id %> <%= status_badge(@order) %></h1>
+
+<dl>
+  <dt>Fecha</dt><dd><%= date_time(@order.created_at) %></dd>
+  <dt>Cliente</dt><dd><%= link_to @order.user, admin_user_path(@order.user) %></dd>
+  <dt>Función</dt><dd><%= link_to @order.screening, admin_screening_path(@order.screening) %></dd>
+  <dt>Formato</dt><dd><%= enum_label(Screening, :screen_format, @order.screening.screen_format) %> · <%= enum_label(Screening, :language, @order.screening.language) %></dd>
+  <dt>Asientos</dt><dd><%= @order.cancelled? ? "Liberados (compra cancelada)" : @order.seat_labels %></dd>
+  <dt>Cargo por servicio</dt><dd><%= money(@order.service_fee) %></dd>
+  <dt>Total</dt><dd><strong><%= money(@order.total) %></strong></dd>
+</dl>
+
+<div class="actions">
+  <% if @order.pending? %>
+    <%= button_to "Marcar como pagada", pay_admin_order_path(@order), method: :patch, class: "btn primary" %>
+  <% end %>
+  <% unless @order.cancelled? %>
+    <%= button_to "Cancelar compra", cancel_admin_order_path(@order), method: :patch, class: "btn",
+                  form: { data: { turbo_confirm: "¿Cancelar la compra y liberar los asientos?" } } %>
+  <% end %>
+  <%= delete_button admin_order_path(@order) %>
+</div>
+
+<% if @order.tickets.any? %>
+  <h2>Entradas</h2>
+  <table>
+    <thead><tr><th>Asiento</th><th>Código</th><th>Precio</th></tr></thead>
+    <tbody>
+      <% @order.tickets.includes(:seat).sort_by { |t| [ t.seat.row, t.seat.number ] }.each do |ticket| %>
+        <tr>
+          <td><%= ticket.seat.label %></td>
+          <td><code><%= ticket.code %></code></td>
+          <td><%= money(ticket.price) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,25 @@
+<%= form_with model: [ :admin, user ] do |f| %>
+  <%= form_errors(user) %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :email_address %>
+    <%= f.email_field :email_address, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :role %>
+    <%= f.select :role, enum_options(User, :role) %>
+  </div>
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password, required: user.new_record?, autocomplete: "new-password", maxlength: 72 %>
+    <% if user.persisted? %><small class="muted">Dejalo vacío para no cambiarla.</small><% end %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", maxlength: 72 %>
+  </div>
+  <%= f.submit "Guardar" %>
+<% end %>

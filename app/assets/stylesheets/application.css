@@ -1,0 +1,70 @@
+/* Estilos mínimos del back-office: solo lo necesario para que sea legible. */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; font-size: 15px; color: #222; background: #f6f6f6; }
+main { padding: 20px 24px; }
+main.narrow { max-width: 420px; margin: 40px auto; background: #fff; border: 1px solid #ddd; }
+h1 { margin-top: 0; }
+a { color: #b36b00; }
+
+.topbar { display: flex; align-items: center; gap: 24px; padding: 10px 24px; background: #1a1714; color: #eee; flex-wrap: wrap; }
+.topbar nav { display: flex; gap: 14px; flex: 1; flex-wrap: wrap; }
+.topbar nav a { color: #ccc; text-decoration: none; }
+.topbar nav a.active { color: #e8a33d; font-weight: bold; }
+.topbar .user { display: flex; align-items: center; gap: 8px; }
+.topbar form { margin: 0; }
+
+.flash { padding: 8px 12px; margin-bottom: 16px; border: 1px solid; }
+.flash.notice { background: #eaf7ea; border-color: #9c9; }
+.flash.alert, .errors { background: #fbeaea; border: 1px solid #d99; padding: 8px 12px; margin-bottom: 16px; }
+.errors ul { margin: 4px 0 0; }
+
+.header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+.actions form { margin: 0; }
+
+table { border-collapse: collapse; width: 100%; background: #fff; margin-bottom: 20px; }
+th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #eee; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; background: #fff; padding: 12px; border: 1px solid #ddd; }
+dt { font-weight: bold; }
+dd { margin: 0; }
+
+.field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; max-width: 480px; }
+.field.inline { flex-direction: row; align-items: center; }
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=datetime-local], input[type=date], select, textarea { padding: 6px; font: inherit; border: 1px solid #bbb; }
+.filters { display: flex; gap: 8px; align-items: end; flex-wrap: wrap; margin-bottom: 12px; }
+.filters .field { margin: 0; }
+
+.btn, input[type=submit], button { display: inline-block; padding: 6px 12px; font: inherit; border: 1px solid #888; background: #fff; color: #222; cursor: pointer; text-decoration: none; }
+input[type=submit], .btn.primary { background: #e8a33d; border-color: #b87c1f; }
+.btn.danger { border-color: #c44; color: #c44; }
+.btn.small { padding: 2px 8px; font-size: 13px; }
+
+.stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.stats div { background: #fff; border: 1px solid #ddd; padding: 10px 16px; min-width: 140px; }
+.stats strong { display: block; font-size: 22px; }
+
+.badge { padding: 1px 6px; border-radius: 3px; font-size: 13px; background: #eee; }
+.badge.paid { background: #d6f0d6; }
+.badge.pending { background: #fff0c8; }
+.badge.cancelled { background: #f3d4d4; }
+
+/* Mapa de asientos */
+.seat-map { background: #fff; border: 1px solid #ddd; padding: 12px; display: inline-block; margin-bottom: 16px; }
+.seat-map .screen { text-align: center; letter-spacing: 4px; font-size: 12px; border-top: 3px solid #e8a33d; margin-bottom: 10px; padding-top: 4px; }
+.seat-row { display: flex; gap: 4px; align-items: center; margin-bottom: 4px; }
+.seat-row .row-label { width: 18px; font-weight: bold; }
+.seat-row form { margin: 0; }
+.seat { width: 34px; height: 28px; font-size: 12px; padding: 0; border: 1px solid #999; background: #fff; display: inline-flex; align-items: center; justify-content: center; }
+.seat.accessible { border: 2px solid #3a9; }
+.seat.taken { background: #555; color: #fff; }
+.seat input { margin: 0; }
+label.seat { cursor: pointer; }
+label.seat:has(input:checked), .seat.selected { background: #e8a33d; }
+.legend { display: flex; gap: 12px; font-size: 13px; margin-top: 8px; }
+.legend span { display: inline-flex; gap: 4px; align-items: center; }
+.legend .seat { width: 16px; height: 16px; }
+
+img.poster { max-width: 200px; border: 1px solid #ddd; }
+img.thumb { width: 40px; }
+.muted { color: #777; }

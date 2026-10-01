@@ -1,0 +1,71 @@
+es:
+  activerecord:
+    models:
+      user: { one: Usuario, other: Usuarios }
+      cinema: { one: Sede, other: Sedes }
+      hall: { one: Sala, other: Salas }
+      seat: { one: Asiento, other: Asientos }
+      movie: { one: Película, other: Películas }
+      screening: { one: Función, other: Funciones }
+      order: { one: Compra, other: Compras }
+      ticket: { one: Entrada, other: Entradas }
+    attributes:
+      user:
+        name: Nombre
+        email_address: Correo electrónico
+        password: Contraseña
+        password_confirmation: Confirmación de contraseña
+        role: Rol
+      cinema:
+        name: Nombre
+        address: Dirección
+        city: Ciudad
+      hall:
+        cinema: Sede
+        name: Nombre
+        hall_type: Tipo de sala
+        rows_count: Cantidad de filas
+        seats_per_row: Asientos por fila
+      seat:
+        row: Fila
+        number: Número
+        accessible: Movilidad reducida
+      movie:
+        title: Título
+        synopsis: Sinopsis
+        genre: Género
+        duration_minutes: Duración (minutos)
+        rating: Clasificación
+        status: Estado
+        release_date: Fecha de estreno
+        poster: Póster
+      screening:
+        movie: Película
+        hall: Sala
+        starts_at: Inicio
+        screen_format: Formato
+        language: Idioma
+        price: Precio de entrada
+      order:
+        user: Usuario
+        screening: Función
+        status: Estado
+        service_fee: Cargo por servicio
+        total: Total
+      ticket:
+        seat: Asiento
+        price: Precio
+        code: Código
+
+  enums:
+    user:
+      role: { customer: Cliente, admin: Administrador }
+    hall:
+      hall_type: { standard: Estándar, three_d: 3D, imax: IMAX }
+    movie:
+      status: { now_showing: En cartelera, coming_soon: Próximamente, archived: Archivada }
+    screening:
+      screen_format: { two_d: 2D, three_d: 3D, imax: IMAX }
+      language: { dubbed: Doblada, subtitled: Subtitulada }
+    order:
+      status: { pending: Pendiente, paid: Pagada, cancelled: Cancelada }

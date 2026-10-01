@@ -1,0 +1,35 @@
+<% content_for :title, @hall.to_s %>
+<p><%= link_to "← #{@hall.cinema.name}", admin_cinema_path(@hall.cinema) %></p>
+<h1><%= @hall.name %> <small class="muted"><%= enum_label(Hall, :hall_type, @hall.hall_type) %></small></h1>
+
+<dl>
+  <dt>Sede</dt><dd><%= link_to @hall.cinema.name, admin_cinema_path(@hall.cinema) %></dd>
+  <dt>Distribución</dt><dd><%= @hall.rows_count %> filas × <%= @hall.seats_per_row %> asientos</dd>
+  <dt>Capacidad</dt><dd><%= @hall.capacity %></dd>
+  <dt>Movilidad reducida</dt><dd><%= @hall.seats.where(accessible: true).count %> asientos</dd>
+</dl>
+
+<div class="actions">
+  <%= link_to "Editar", edit_admin_hall_path(@hall), class: "btn" %>
+  <%= link_to "Ver funciones", admin_screenings_path(cinema_id: @hall.cinema_id), class: "btn" %>
+  <%= delete_button admin_hall_path(@hall) %>
+</div>
+
+<h2>Asientos</h2>
+<p class="muted">Hacé clic en un asiento para marcarlo/desmarcarlo como apto para movilidad reducida.</p>
+<div class="seat-map">
+  <div class="screen">PANTALLA</div>
+  <% @seats_by_row.each do |row, seats| %>
+    <div class="seat-row">
+      <span class="row-label"><%= row %></span>
+      <% seats.each do |seat| %>
+        <%= button_to seat.number, admin_hall_seat_path(@hall, seat), method: :patch,
+                      class: [ "seat", ("accessible" if seat.accessible) ], title: seat.label %>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="legend">
+    <span><i class="seat"></i> Estándar</span>
+    <span><i class="seat accessible"></i> Movilidad reducida</span>
+  </div>
+</div>

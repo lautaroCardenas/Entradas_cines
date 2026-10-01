@@ -1,0 +1,15 @@
+<% content_for :title, "Salas" %>
+<div class="header">
+  <h1>Salas</h1>
+  <%= link_to "Nueva sala", new_admin_hall_path, class: "btn primary" %>
+</div>
+
+<%= form_with url: admin_halls_path, method: :get, class: "filters" do |f| %>
+  <div class="field">
+    <%= f.label :cinema_id, "Sede" %>
+    <%= f.select :cinema_id, Cinema.order(:name).pluck(:name, :id), { include_blank: "Todas", selected: params[:cinema_id] } %>
+  </div>
+  <%= f.submit "Filtrar", name: nil %>
+<% end %>
+
+<%= render "table", halls: @halls %>

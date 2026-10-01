@@ -1,0 +1,4 @@
+<% content_for :title, "Editar sala" %>
+<p><%= link_to "← Volver a la sala", admin_hall_path(@hall) %></p>
+<h1>Editar sala</h1>
+<%= render "form", hall: @hall %>

@@ -1,0 +1,23 @@
+<% content_for :title, "Sedes" %>
+<div class="header">
+  <h1>Sedes</h1>
+  <%= link_to "Nueva sede", new_admin_cinema_path, class: "btn primary" %>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Dirección</th><th>Ciudad</th><th>Salas</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% @cinemas.each do |cinema| %>
+      <tr>
+        <td><%= link_to cinema.name, admin_cinema_path(cinema) %></td>
+        <td><%= cinema.address %></td>
+        <td><%= cinema.city %></td>
+        <td><%= cinema.halls.size %></td>
+        <td><%= link_to "Editar", edit_admin_cinema_path(cinema) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("No hay sedes cargadas.", class: "muted") if @cinemas.empty? %>

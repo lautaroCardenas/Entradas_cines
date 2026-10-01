@@ -1,0 +1,21 @@
+<h1>¡Gracias por tu compra, <%= @order.user.name %>!</h1>
+
+<p>Estas son tus entradas:</p>
+
+<ul>
+  <li><strong>Película:</strong> <%= @screening.movie.title %></li>
+  <li><strong>Función:</strong> <%= l(@screening.starts_at, format: "%d/%m/%Y %H:%M") %></li>
+  <li><strong>Sede:</strong> <%= @screening.hall.cinema.name %> — <%= @screening.hall.cinema.address %></li>
+  <li><strong>Sala:</strong> <%= @screening.hall.name %></li>
+  <li><strong>Asientos:</strong> <%= @order.seat_labels %></li>
+  <li><strong>Total pagado:</strong> $<%= number_with_precision(@order.total, precision: 2, delimiter: ".", separator: ",") %></li>
+</ul>
+
+<p>Códigos de entrada (presentalos en el acceso):</p>
+<ul>
+  <% @order.tickets.each do |ticket| %>
+    <li><%= ticket.seat.label %>: <code><%= ticket.code %></code></li>
+  <% end %>
+</ul>
+
+<p>¡Que disfrutes la función!<br>Sala Norte</p>

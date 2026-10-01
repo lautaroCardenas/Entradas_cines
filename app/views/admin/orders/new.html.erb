@@ -1,0 +1,41 @@
+<% content_for :title, "Vender entradas" %>
+<p><%= link_to "← Compras", admin_orders_path %></p>
+<h1>Vender entradas</h1>
+
+<% if @order.screening.nil? %>
+  <%# Paso 1: elegir la función %>
+  <%= form_with url: new_admin_order_path, method: :get do |f| %>
+    <div class="field">
+      <%= f.label :screening_id, "Función" %>
+      <%= f.select :screening_id,
+                   Screening.upcoming.chronological.includes(:movie, hall: :cinema).reject(&:sold_out?).map { |s| [ s.to_s, s.id ] },
+                   { prompt: "Elegí una función" }, required: true %>
+    </div>
+    <%= hidden_field_tag :user_id, params[:user_id] if params[:user_id].present? %>
+    <%= f.submit "Continuar", name: nil %>
+  <% end %>
+<% else %>
+  <%# Paso 2: elegir cliente y asientos %>
+  <dl>
+    <dt>Función</dt><dd><%= @order.screening %> (<%= link_to "cambiar", new_admin_order_path %>)</dd>
+    <dt>Precio por entrada</dt><dd><%= money(@order.screening.price) %> + <%= (Order::SERVICE_FEE_RATE * 100).to_i %>% de cargo por servicio</dd>
+  </dl>
+
+  <%= form_with model: [ :admin, @order ] do |f| %>
+    <%= form_errors(@order) %>
+    <%= f.hidden_field :screening_id %>
+    <div class="field">
+      <%= f.label :user_id, "Cliente" %>
+      <%= f.collection_select :user_id, User.order(:name), :id, :to_s, { prompt: "Elegí un cliente" }, required: true %>
+    </div>
+    <div class="field">
+      <%= f.label :status, "Estado inicial" %>
+      <%= f.select :status, enum_options(Order, :status).first(2) %>
+    </div>
+
+    <p>Seleccioná hasta <%= Order::MAX_TICKETS %> asientos:</p>
+    <%= render "admin/shared/seat_map", seats_by_row: @seats_by_row, taken_seat_ids: @taken_seat_ids,
+                                        form: f, selected_ids: @order.tickets.map(&:seat_id) %>
+    <div><%= f.submit "Registrar compra" %></div>
+  <% end %>
+<% end %>

@@ -1,0 +1,39 @@
+<%= form_with model: [ :admin, movie ] do |f| %>
+  <%= form_errors(movie) %>
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :genre %>
+    <%= f.text_field :genre, required: true, placeholder: "Drama, Comedia, Ciencia ficción..." %>
+  </div>
+  <div class="field">
+    <%= f.label :duration_minutes %>
+    <%= f.number_field :duration_minutes, min: 1, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :rating %>
+    <%= f.select :rating, Movie::RATINGS, { prompt: "Elegí una clasificación" }, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :status %>
+    <%= f.select :status, enum_options(Movie, :status) %>
+  </div>
+  <div class="field">
+    <%= f.label :release_date %>
+    <%= f.date_field :release_date %>
+  </div>
+  <div class="field">
+    <%= f.label :synopsis %>
+    <%= f.text_area :synopsis, rows: 4 %>
+  </div>
+  <div class="field">
+    <%= f.label :poster %>
+    <% if movie.poster.attached? && movie.poster.persisted? %>
+      <%= image_tag movie.poster, class: "thumb", alt: "" %>
+    <% end %>
+    <%= f.file_field :poster, accept: Movie::POSTER_TYPES.join(",") %>
+  </div>
+  <%= f.submit "Guardar" %>
+<% end %>

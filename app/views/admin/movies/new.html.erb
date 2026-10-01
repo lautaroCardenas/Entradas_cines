@@ -1,0 +1,4 @@
+<% content_for :title, "Nueva película" %>
+<p><%= link_to "← Películas", admin_movies_path %></p>
+<h1>Nueva película</h1>
+<%= render "form", movie: @movie %>

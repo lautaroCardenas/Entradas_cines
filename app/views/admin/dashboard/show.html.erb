@@ -1,0 +1,24 @@
+<% content_for :title, "Inicio" %>
+<h1>Panel de administración</h1>
+
+<div class="stats">
+  <div><strong><%= @counts[:cinemas] %></strong>Sedes</div>
+  <div><strong><%= @counts[:halls] %></strong>Salas</div>
+  <div><strong><%= @counts[:movies] %></strong>Películas en cartelera</div>
+  <div><strong><%= @counts[:upcoming_screenings] %></strong>Funciones próximas</div>
+  <div><strong><%= @counts[:paid_orders] %></strong>Compras pagadas</div>
+  <div><strong><%= money(@revenue) %></strong>Recaudación</div>
+  <div><strong><%= @counts[:customers] %></strong>Clientes</div>
+</div>
+
+<div class="actions">
+  <%= link_to "Nueva película", new_admin_movie_path, class: "btn" %>
+  <%= link_to "Nueva función", new_admin_screening_path, class: "btn" %>
+  <%= link_to "Vender entradas", new_admin_order_path, class: "btn primary" %>
+</div>
+
+<h2>Próximas funciones</h2>
+<%= render "admin/screenings/table", screenings: @next_screenings %>
+
+<h2>Últimas compras</h2>
+<%= render "admin/orders/table", orders: @latest_orders %>

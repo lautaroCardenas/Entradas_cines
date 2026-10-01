@@ -1,0 +1,30 @@
+<%# Mapa de asientos de una función. Si se pasa `form`, los asientos libres son seleccionables. %>
+<% form = local_assigns[:form] %>
+<% selected_ids = Array(local_assigns[:selected_ids]) %>
+<div class="seat-map">
+  <div class="screen">PANTALLA</div>
+  <% seats_by_row.each do |row, seats| %>
+    <div class="seat-row">
+      <span class="row-label"><%= row %></span>
+      <% seats.each do |seat| %>
+        <% classes = [ "seat", ("accessible" if seat.accessible) ] %>
+        <% if taken_seat_ids.include?(seat.id) %>
+          <span class="<%= (classes + [ "taken" ]).compact.join(" ") %>" title="<%= seat.label %> (ocupado)"><%= seat.number %></span>
+        <% elsif form %>
+          <label class="<%= classes.compact.join(" ") %>" title="<%= seat.label %>">
+            <%= check_box_tag "order[seat_ids][]", seat.id, selected_ids.include?(seat.id), id: "seat_#{seat.id}", hidden: true %>
+            <%= seat.number %>
+          </label>
+        <% else %>
+          <span class="<%= classes.compact.join(" ") %>" title="<%= seat.label %>"><%= seat.number %></span>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="legend">
+    <span><i class="seat"></i> Disponible</span>
+    <% if form %><span><i class="seat selected"></i> Seleccionado</span><% end %>
+    <span><i class="seat taken"></i> Ocupado</span>
+    <span><i class="seat accessible"></i> Movilidad reducida</span>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<% content_for :title, "Editar usuario" %>
+<p><%= link_to "← Volver al usuario", admin_user_path(@user) %></p>
+<h1>Editar usuario</h1>
+<%= render "form", user: @user %>

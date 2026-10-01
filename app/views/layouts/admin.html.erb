@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title><%= content_for(:title) || "Back-office" %> · Sala Norte</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <strong>SALA NORTE · Admin</strong>
+      <nav>
+        <%= nav_link "Inicio", admin_root_path, exact: true %>
+        <%= nav_link "Sedes", admin_cinemas_path %>
+        <%= nav_link "Salas", admin_halls_path %>
+        <%= nav_link "Películas", admin_movies_path %>
+        <%= nav_link "Funciones", admin_screenings_path %>
+        <%= nav_link "Compras", admin_orders_path %>
+        <%= nav_link "Usuarios", admin_users_path %>
+      </nav>
+      <div class="user">
+        <%= Current.user.name %>
+        <%= button_to "Salir", session_path, method: :delete, class: "btn small" %>
+      </div>
+    </header>
+
+    <main>
+      <%= tag.div(notice, class: "flash notice") if notice %>
+      <%= tag.div(alert, class: "flash alert") if alert %>
+      <%= yield %>
+    </main>
+  </body>
+</html>

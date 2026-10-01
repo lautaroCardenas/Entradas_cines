@@ -1,0 +1,25 @@
+<% content_for :title, @movie.title %>
+<p><%= link_to "← Películas", admin_movies_path %></p>
+<h1><%= @movie.title %></h1>
+
+<% if @movie.poster.attached? %>
+  <p><%= image_tag @movie.poster, class: "poster", alt: "Póster de #{@movie.title}" %></p>
+<% end %>
+
+<dl>
+  <dt>Género</dt><dd><%= @movie.genre %></dd>
+  <dt>Duración</dt><dd><%= @movie.duration_label %></dd>
+  <dt>Clasificación</dt><dd><%= @movie.rating %></dd>
+  <dt>Estado</dt><dd><%= enum_label(Movie, :status, @movie.status) %></dd>
+  <dt>Estreno</dt><dd><%= @movie.release_date ? l(@movie.release_date) : "—" %></dd>
+  <dt>Sinopsis</dt><dd><%= simple_format(@movie.synopsis.presence || "—") %></dd>
+</dl>
+
+<div class="actions">
+  <%= link_to "Editar", edit_admin_movie_path(@movie), class: "btn" %>
+  <%= link_to "Nueva función", new_admin_screening_path(movie_id: @movie.id), class: "btn" %>
+  <%= delete_button admin_movie_path(@movie) %>
+</div>
+
+<h2>Próximas funciones</h2>
+<%= render "admin/screenings/table", screenings: @screenings %>

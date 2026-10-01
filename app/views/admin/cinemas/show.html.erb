@@ -1,0 +1,19 @@
+<% content_for :title, @cinema.name %>
+<p><%= link_to "← Sedes", admin_cinemas_path %></p>
+<h1><%= @cinema.name %></h1>
+
+<dl>
+  <dt>Dirección</dt><dd><%= @cinema.address %></dd>
+  <dt>Ciudad</dt><dd><%= @cinema.city %></dd>
+</dl>
+
+<div class="actions">
+  <%= link_to "Editar", edit_admin_cinema_path(@cinema), class: "btn" %>
+  <%= delete_button admin_cinema_path(@cinema) %>
+</div>
+
+<div class="header">
+  <h2>Salas</h2>
+  <%= link_to "Nueva sala", new_admin_hall_path(cinema_id: @cinema.id), class: "btn" %>
+</div>
+<%= render "admin/halls/table", halls: @halls %>

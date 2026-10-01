@@ -1,0 +1,18 @@
+<table>
+  <thead>
+    <tr><th>Sala</th><th>Sede</th><th>Tipo</th><th>Filas × asientos</th><th>Capacidad</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% halls.each do |hall| %>
+      <tr>
+        <td><%= link_to hall.name, admin_hall_path(hall) %></td>
+        <td><%= hall.cinema.name %></td>
+        <td><%= enum_label(Hall, :hall_type, hall.hall_type) %></td>
+        <td><%= hall.rows_count %> × <%= hall.seats_per_row %></td>
+        <td><%= hall.capacity %></td>
+        <td><%= link_to "Editar", edit_admin_hall_path(hall) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("No hay salas.", class: "muted") if halls.empty? %>

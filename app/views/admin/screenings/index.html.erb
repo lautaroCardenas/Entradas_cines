@@ -1,0 +1,27 @@
+<% content_for :title, "Funciones" %>
+<div class="header">
+  <h1>Funciones</h1>
+  <%= link_to "Nueva función", new_admin_screening_path, class: "btn primary" %>
+</div>
+
+<%= form_with url: admin_screenings_path, method: :get, class: "filters" do |f| %>
+  <div class="field">
+    <%= f.label :cinema_id, "Sede" %>
+    <%= f.select :cinema_id, Cinema.order(:name).pluck(:name, :id), { include_blank: "Todas", selected: params[:cinema_id] } %>
+  </div>
+  <div class="field">
+    <%= f.label :movie_id, "Película" %>
+    <%= f.select :movie_id, Movie.order(:title).pluck(:title, :id), { include_blank: "Todas", selected: params[:movie_id] } %>
+  </div>
+  <div class="field">
+    <%= f.label :date, "Fecha" %>
+    <%= f.date_field :date, value: params[:date] %>
+  </div>
+  <div class="field inline">
+    <%= f.check_box :all, { checked: params[:all].present? }, "1", nil %>
+    <%= f.label :all, "Incluir pasadas" %>
+  </div>
+  <%= f.submit "Filtrar", name: nil %>
+<% end %>
+
+<%= render "table", screenings: @screenings %>

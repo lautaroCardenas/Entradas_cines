@@ -1,0 +1,29 @@
+<%= form_with model: [ :admin, screening ] do |f| %>
+  <%= form_errors(screening) %>
+  <div class="field">
+    <%= f.label :movie_id %>
+    <%= f.collection_select :movie_id, Movie.where.not(status: :archived).order(:title), :id, :title, { prompt: "Elegí una película" }, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :hall_id %>
+    <%= f.select :hall_id, Hall.includes(:cinema).order("cinemas.name", :name).references(:cinema).map { |h| [ "#{h} (#{enum_label(Hall, :hall_type, h.hall_type)})", h.id ] },
+                 { prompt: "Elegí una sala" }, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :starts_at %>
+    <%= f.datetime_field :starts_at, required: true %>
+  </div>
+  <div class="field">
+    <%= f.label :screen_format %>
+    <%= f.select :screen_format, enum_options(Screening, :screen_format) %>
+  </div>
+  <div class="field">
+    <%= f.label :language %>
+    <%= f.select :language, enum_options(Screening, :language) %>
+  </div>
+  <div class="field">
+    <%= f.label :price %>
+    <%= f.number_field :price, min: 0, step: "0.01", required: true %>
+  </div>
+  <%= f.submit "Guardar" %>
+<% end %>

@@ -1,0 +1,32 @@
+<% content_for :title, @user.name %>
+<p><%= link_to "← Usuarios", admin_users_path %></p>
+<h1><%= @user.name %></h1>
+
+<dl>
+  <dt>Correo</dt><dd><%= @user.email_address %></dd>
+  <dt>Rol</dt><dd><%= enum_label(User, :role, @user.role) %></dd>
+  <dt>Alta</dt><dd><%= date_time(@user.created_at) %></dd>
+</dl>
+
+<div class="actions">
+  <%= link_to "Editar", edit_admin_user_path(@user), class: "btn" %>
+  <%= link_to "Venderle entradas", new_admin_order_path(user_id: @user.id), class: "btn" %>
+  <%= delete_button admin_user_path(@user) unless @user == Current.user %>
+</div>
+
+<h2>Compras</h2>
+<table>
+  <thead><tr><th>#</th><th>Fecha</th><th>Película</th><th>Total</th><th>Estado</th></tr></thead>
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td><%= link_to order.id, admin_order_path(order) %></td>
+        <td><%= date_time(order.created_at) %></td>
+        <td><%= order.screening.movie.title %></td>
+        <td><%= money(order.total) %></td>
+        <td><%= status_badge(order) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= tag.p("Sin compras.", class: "muted") if @orders.empty? %>

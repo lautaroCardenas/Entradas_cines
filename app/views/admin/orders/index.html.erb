@@ -1,0 +1,16 @@
+<% content_for :title, "Compras" %>
+<div class="header">
+  <h1>Compras</h1>
+  <%= link_to "Vender entradas", new_admin_order_path, class: "btn primary" %>
+</div>
+
+<%= form_with url: admin_orders_path, method: :get, class: "filters" do |f| %>
+  <div class="field">
+    <%= f.label :status, "Estado" %>
+    <%= f.select :status, enum_options(Order, :status), { include_blank: "Todos", selected: params[:status] } %>
+  </div>
+  <%= f.hidden_field :screening_id, value: params[:screening_id] if params[:screening_id].present? %>
+  <%= f.submit "Filtrar", name: nil %>
+<% end %>
+
+<%= render "table", orders: @orders %>
