@@ -30,6 +30,27 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_equal 6, response.parsed_body["seats"].size
   end
 
+  test "movies can be filtered by date and cinema" do
+    tomorrow = @screening.starts_at.to_date
+
+    get api_v1_movies_path, params: { date: tomorrow.to_s, cinema_id: @hall.cinema_id }, as: :json
+    assert_equal [ @movie.id ], response.parsed_body.map { |m| m["id"] }
+
+    get api_v1_movies_path, params: { date: (tomorrow + 5).to_s }, as: :json
+    assert_empty response.parsed_body
+
+    get api_v1_movies_path, params: { date: "no-es-fecha" }, as: :json
+    assert_response :bad_request
+  end
+
+  test "the front-end origin is allowed by CORS" do
+    get api_v1_movies_path, headers: { "Origin" => "http://localhost:5173" }, as: :json
+    assert_equal "http://localhost:5173", response.headers["Access-Control-Allow-Origin"]
+
+    get api_v1_movies_path, headers: { "Origin" => "http://sitio-malicioso.com" }, as: :json
+    assert_nil response.headers["Access-Control-Allow-Origin"]
+  end
+
   test "protected endpoints require a token" do
     get api_v1_profile_path, as: :json
     assert_response :unauthorized
