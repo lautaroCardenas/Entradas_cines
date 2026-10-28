@@ -51,6 +51,8 @@ En [`docs/sala_norte.postman_collection.json`](docs/sala_norte.postman_collectio
 | PATCH | `/api/v1/orders/:id/pay` | ✔ | Marca la compra como pagada (simula el pago) y envía el mail de confirmación. |
 | PATCH | `/api/v1/orders/:id/cancel` | ✔ | Cancela la compra y libera los asientos. |
 
+**CORS:** la API acepta requests del front-end desde los orígenes de la variable de entorno `FRONTEND_ORIGINS`, separados por coma. Por defecto es `http://localhost:5173`, el servidor de desarrollo de Vite.
+
 Errores: `401` sin token o token inválido, `404` recurso inexistente (o compra de otro usuario), `422` validación fallida con `details`, `400` parámetros faltantes.
 
 ## Emails (Action Mailer)
