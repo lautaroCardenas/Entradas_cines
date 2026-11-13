@@ -12,5 +12,5 @@ test:
   <<: *default
 
 production:
-  database: cache
+  # En el deploy se usa :memory_store (ver production.rb); Solid Cache no tiene base propia.
   <<: *default

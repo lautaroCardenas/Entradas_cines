@@ -1,0 +1,23 @@
+# Blueprint de Render para el back-end (API + back-office).
+# La base de datos es PostgreSQL en Neon: su URL se carga a mano en DATABASE_URL.
+services:
+  - type: web
+    name: sala-norte-api
+    runtime: ruby
+    plan: free
+    buildCommand: ./bin/render-build.sh
+    startCommand: ./bin/render-start.sh
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: BUNDLE_WITHOUT
+        value: development:test
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false # URL de conexión de Neon (postgresql://...?sslmode=require)
+      - key: FRONTEND_ORIGINS
+        sync: false # URL del front publicado, ej. https://sala-norte-front.onrender.com
+      - key: APP_HOST
+        sync: false # dominio del back, ej. sala-norte-api.onrender.com
