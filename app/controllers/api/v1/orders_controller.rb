@@ -40,10 +40,13 @@ module Api
 
       # PATCH /api/v1/orders/:id/cancel
       def cancel
-        if @order.cancel!
-          render :show
-        else
+        if @order.cancelled?
           render_error("La compra ya estaba cancelada", :unprocessable_content)
+        elsif !@order.cancellable_by_customer?
+          render_error("No se puede cancelar una compra de una función que ya empezó", :unprocessable_content)
+        else
+          @order.cancel!
+          render :show
         end
       end
 

@@ -86,6 +86,39 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_includes response.parsed_body["details"].join, "ocupados"
   end
 
+  test "customer can cancel before the screening starts and seats are released" do
+    order = Order.new(user: @customer, screening: @screening)
+    order.assign_seats([ @hall.seats.first.id ])
+    order.save!
+
+    get api_v1_order_path(order), headers: auth_headers, as: :json
+    assert response.parsed_body["cancellable"]
+
+    patch cancel_api_v1_order_path(order), headers: auth_headers, as: :json
+    assert_response :success
+    assert_equal "cancelled", response.parsed_body["status"]
+    assert_empty @screening.reload.taken_seat_ids
+
+    patch cancel_api_v1_order_path(order), headers: auth_headers, as: :json
+    assert_response :unprocessable_content
+  end
+
+  test "customer cannot cancel once the screening has started" do
+    order = Order.new(user: @customer, screening: @screening)
+    order.assign_seats([ @hall.seats.first.id ])
+    order.save!
+
+    travel_to @screening.starts_at + 5.minutes do
+      get api_v1_order_path(order), headers: auth_headers, as: :json
+      assert_not response.parsed_body["cancellable"]
+
+      patch cancel_api_v1_order_path(order), headers: auth_headers, as: :json
+      assert_response :unprocessable_content
+      assert_match "ya empezó", response.parsed_body["error"]
+    end
+    assert order.reload.pending?
+  end
+
   test "a customer cannot see another user's order" do
     order = Order.new(user: users(:one), screening: @screening)
     order.assign_seats([ @hall.seats.first.id ])
