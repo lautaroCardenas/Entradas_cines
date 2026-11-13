@@ -56,6 +56,15 @@ class AdminBackofficeTest < ActionDispatch::IntegrationTest
     assert_not_includes @screening.taken_seat_ids, seat.id
   end
 
+  test "admin can cancel an order even after the screening started" do
+    sign_in_as(@admin)
+
+    travel_to @screening.starts_at + 10.minutes do
+      patch cancel_admin_order_path(@order)
+    end
+    assert @order.reload.cancelled?
+  end
+
   test "selling an occupied seat fails" do
     sign_in_as(@admin)
     taken = @order.tickets.first.seat_id

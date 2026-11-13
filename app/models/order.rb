@@ -51,6 +51,12 @@ class Order < ApplicationRecord
     paid!
   end
 
+  # El cliente solo puede cancelar antes de que empiece la función.
+  # El admin puede cancelar siempre desde el back-office (usa cancel! directamente).
+  def cancellable_by_customer?
+    !cancelled? && screening.starts_at > Time.current
+  end
+
   # Cancela la compra y libera los asientos para que puedan volver a venderse.
   def cancel!
     return false if cancelled?

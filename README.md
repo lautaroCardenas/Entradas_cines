@@ -42,14 +42,16 @@ En [`docs/sala_norte.postman_collection.json`](docs/sala_norte.postman_collectio
 | POST | `/api/v1/users` | — | Registro de cliente (`user: {name, email_address, password, password_confirmation}`). Envía mail de bienvenida. |
 | GET | `/api/v1/profile` | ✔ | Datos del usuario autenticado. |
 | GET | `/api/v1/cinemas` | — | Sedes. |
-| GET | `/api/v1/movies` | — | Cartelera. `?status=coming_soon` para próximos estrenos. |
+| GET | `/api/v1/movies` | — | Cartelera. Filtros: `?date=AAAA-MM-DD` y `?cinema_id=` (solo películas con funciones ese día o en esa sede; `400` si la fecha es inválida). `?status=coming_soon` para próximos estrenos. |
 | GET | `/api/v1/movies/:id` | — | Detalle con próximas funciones. Filtros: `?cinema_id=` y `?date=AAAA-MM-DD`. |
 | GET | `/api/v1/screenings/:id` | — | Función con el mapa de asientos (`taken: true/false`). |
 | GET | `/api/v1/orders` | ✔ | Compras del usuario ("Mis entradas"). |
 | GET | `/api/v1/orders/:id` | ✔ | Detalle de una compra propia. |
 | POST | `/api/v1/orders` | ✔ | Compra: `order: {screening_id, seat_ids: []}`. |
 | PATCH | `/api/v1/orders/:id/pay` | ✔ | Marca la compra como pagada (simula el pago) y envía el mail de confirmación. |
-| PATCH | `/api/v1/orders/:id/cancel` | ✔ | Cancela la compra y libera los asientos. |
+| PATCH | `/api/v1/orders/:id/cancel` | ✔ | Cancela la compra y libera los asientos. Solo antes de que empiece la función (`422` si ya empezó o si ya estaba cancelada). El JSON de cada compra incluye `cancellable`. |
+
+**CORS:** la API acepta requests del front-end desde los orígenes de la variable de entorno `FRONTEND_ORIGINS`, separados por coma. Por defecto es `http://localhost:5173`, el servidor de desarrollo de Vite.
 
 Errores: `401` sin token o token inválido, `404` recurso inexistente (o compra de otro usuario), `422` validación fallida con `details`, `400` parámetros faltantes.
 
@@ -89,3 +91,13 @@ bin/rails test
 bin/rubocop
 bin/brakeman
 ```
+
+## Front-end y deploy (TP 2)
+
+- **Front-end (React):** https://github.com/lautaroCardenas/sala-norte-frontend. Su README es el principal del TP 2: tiene la instalación de los dos proyectos, las credenciales, los tests y las URLs del deploy.
+- **Deploy:** Render (este back-end) + PostgreSQL en Neon. La configuración está en [`render.yaml`](render.yaml), [`bin/render-build.sh`](bin/render-build.sh) y [`bin/render-start.sh`](bin/render-start.sh). En producción:
+  - los mails quedan en el log y no se envían
+  - la caché, los trabajos y los websockets funcionan en memoria
+  - los seeds se corren al arrancar para que siempre haya funciones
+
+  Paso a paso: [DEPLOY.md](https://github.com/lautaroCardenas/sala-norte-frontend/blob/main/docs/DEPLOY.md).

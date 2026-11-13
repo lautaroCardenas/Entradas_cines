@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use sqlite3 as the database for Active Record
+# Use sqlite3 as the database for Active Record (desarrollo y tests)
 gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -18,6 +18,8 @@ gem "stimulus-rails"
 gem "jbuilder"
 # json 3.x cambió la firma de JSON.parse y rompe las cookies firmadas de ActiveSupport 8.1
 gem "json", "~> 2.10"
+# Permite que el front-end (otro origen) consuma la API desde el navegador
+gem "rack-cors"
 
 # Traducciones al español de mensajes de validación, fechas y números
 gem "rails-i18n", "~> 8.0"
@@ -68,4 +70,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+end
+
+group :production do
+  # PostgreSQL para el deploy (Neon). En desarrollo y tests se usa SQLite.
+  gem "pg", "~> 1.6"
 end
