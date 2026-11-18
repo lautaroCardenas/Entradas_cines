@@ -51,6 +51,32 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_nil response.headers["Access-Control-Allow-Origin"]
   end
 
+  test "movie detail does not run one query per screening" do
+    queries_for_movie = lambda do
+      count = 0
+      counter = ->(*, payload) { count += 1 unless payload[:name] == "SCHEMA" || payload[:cached] }
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") { get api_v1_movie_path(@movie), as: :json }
+      count
+    end
+
+    with_one_screening = queries_for_movie.call
+    4.times { |i| Screening.create!(movie: @movie, hall: @hall, starts_at: (2 + i).days.from_now, price: 1000) }
+    with_five_screenings = queries_for_movie.call
+
+    assert_equal 5, response.parsed_body["screenings"].size
+    assert_equal with_one_screening, with_five_screenings
+  end
+
+  test "available seats are kept up to date when tickets are sold and released" do
+    order = Order.new(user: @customer, screening: @screening)
+    order.assign_seats(@hall.seats.first(2).map(&:id))
+    order.save!
+    assert_equal 4, @screening.reload.available_seats_count
+
+    order.cancel!
+    assert_equal 6, @screening.reload.available_seats_count
+  end
+
   test "protected endpoints require a token" do
     get api_v1_profile_path, as: :json
     assert_response :unauthorized

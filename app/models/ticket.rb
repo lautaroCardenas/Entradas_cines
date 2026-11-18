@@ -1,6 +1,6 @@
 class Ticket < ApplicationRecord
   belongs_to :order
-  belongs_to :screening
+  belongs_to :screening, counter_cache: true
   belongs_to :seat
 
   validates :price, numericality: { greater_than: 0 }

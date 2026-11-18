@@ -4,6 +4,7 @@ services:
   - type: web
     name: sala-norte-api
     runtime: ruby
+    region: oregon # misma región que la base en Neon (AWS US West 2), para que las consultas sean rápidas
     plan: free
     buildCommand: ./bin/render-build.sh
     startCommand: ./bin/render-start.sh

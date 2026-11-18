@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_200001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -92,6 +92,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_200001) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.integer "screen_format", default: 0, null: false
     t.datetime "starts_at", null: false
+    t.integer "tickets_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["hall_id", "starts_at"], name: "index_screenings_on_hall_id_and_starts_at"
     t.index ["hall_id"], name: "index_screenings_on_hall_id"

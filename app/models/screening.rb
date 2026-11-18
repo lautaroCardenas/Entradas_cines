@@ -28,7 +28,7 @@ class Screening < ApplicationRecord
   end
 
   def available_seats_count
-    hall.capacity - tickets.count
+    hall.capacity - tickets_count
   end
 
   def sold_out?
