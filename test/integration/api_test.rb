@@ -51,6 +51,19 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_nil response.headers["Access-Control-Allow-Origin"]
   end
 
+  test "movies are ordered by their next screening and include it" do
+    later = Movie.create!(title: "A la tarde", genre: "Drama", duration_minutes: 90, rating: "ATP")
+    Screening.create!(movie: later, hall: @hall, starts_at: @screening.starts_at + 4.hours, price: 1000)
+    no_screenings = Movie.create!(title: "Aaa sin funciones", genre: "Drama", duration_minutes: 90, rating: "ATP")
+
+    get api_v1_movies_path, as: :json
+    body = response.parsed_body
+    assert_equal [ @movie.id, later.id, no_screenings.id ], body.map { |m| m["id"] }
+    assert_equal @screening.id, body.first["next_screening"]["id"]
+    assert_nil body.last["next_screening"]
+    assert body.first.key?("synopsis")
+  end
+
   test "movie detail does not run one query per screening" do
     queries_for_movie = lambda do
       count = 0
